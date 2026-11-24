@@ -12,13 +12,20 @@ import os
 
 JOKE = "My daughter asked why I keep a ladder in the kitchen. I told her, 'For high tea.'"
 
+# The gate only accepts UTF-8 text of 1 to 200 characters, so refuse to
+# write anything that would fail it instead of submitting an invalid entry.
+MAX_CHARS = 200
+
 
 def main():
+    text = JOKE
+    if not 1 <= len(text) <= MAX_CHARS:
+        raise ValueError(f"entry must be 1-{MAX_CHARS} characters, got {len(text)}")
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, "entry.txt")
     with open(path, "w", encoding="utf-8") as handle:
-        handle.write(JOKE)
+        handle.write(text)
 
 
 if __name__ == "__main__":
